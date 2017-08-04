@@ -1,0 +1,85 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="INVESTModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="History_Daily">
+          <Key>
+            <PropertyRef Name="ID_Record" />
+          </Key>
+          <Property Name="Date" Type="smalldatetime" Nullable="false" />
+          <Property Name="Tiker" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Position" Type="int" Nullable="false" />
+          <Property Name="Price_Close" Type="real" Nullable="false" />
+          <Property Name="Market_Value" Type="real" Nullable="false" />
+          <Property Name="PL_Cum" Type="real" Nullable="false" />
+          <Property Name="ID_Record" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+        </EntityType>
+        <EntityContainer Name="INVESTModelStoreContainer">
+          <EntitySet Name="History_Daily" EntityType="Self.History_Daily" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="INVESTModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="History_Daily">
+          <Key>
+            <PropertyRef Name="ID_Record" />
+          </Key>
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Tiker" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Position" Type="Int32" Nullable="false" />
+          <Property Name="Price_Close" Type="Single" Nullable="false" />
+          <Property Name="Market_Value" Type="Single" Nullable="false" />
+          <Property Name="PL_Cum" Type="Single" Nullable="false" />
+          <Property Name="ID_Record" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+        </EntityType>
+        <EntityContainer Name="INVESTEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="History_Daily" EntityType="Self.History_Daily" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="INVESTModelStoreContainer" CdmEntityContainer="INVESTEntities">
+          <EntitySetMapping Name="History_Daily">
+            <EntityTypeMapping TypeName="INVESTModel.History_Daily">
+              <MappingFragment StoreEntitySet="History_Daily">
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Tiker" ColumnName="Tiker" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Price_Close" ColumnName="Price_Close" />
+                <ScalarProperty Name="Market_Value" ColumnName="Market_Value" />
+                <ScalarProperty Name="PL_Cum" ColumnName="PL_Cum" />
+                <ScalarProperty Name="ID_Record" ColumnName="ID_Record" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

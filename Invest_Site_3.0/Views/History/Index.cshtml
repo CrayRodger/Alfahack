@@ -1,0 +1,175 @@
+﻿
+@*@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>*@
+
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript">
+    function drawVisualization() {
+
+
+        $.post('GetDataAssets', {}, function (d) {
+
+            var data = google.visualization.arrayToDataTable(d);
+
+     // Create and draw the visualization.
+            new google.visualization.PieChart(document.getElementById("visualization")).
+                draw(data, { title: "Top Videos", pieHole: 0.4 });
+        }
+    )
+    };
+
+    google.setOnLoadCallback(drawVisualization);
+</script>
+
+<div class="container">
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            Google Pie Chart in MVC
+        </div>
+        <div class="panel-body">
+            <div id="visualization"></div><!--pie chart display DIV-->
+        </div>
+    </div>
+</div>
+    <h2>GetHistory</h2>
+
+    <div class="col-sm-6">
+        <table>
+            <tr>
+                <td>
+                    Search : <input type="text" id="txtSearch" /> <input type="button" value="Search" id="btnSearch" />
+                    <input type="button" value="Get All Days" id="btnAllUser" />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div id="UpdatePanel">
+
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    @*Show Total PL*@
+    <div class="col-sm-6">
+        <p style="background-color:lightseagreen;">
+            @string.Format("Current PL is {0} $; Actual date: {1}", @ViewBag.PL, @ViewBag.LastDate);
+        </p>
+
+        @*Plotting*@
+
+        <div id="chart_div " style="width: 500px; height: 400px">
+
+            @*<p>Cumulative P&L</p>*@
+
+            @*You need to add a reference to jQuery prior to referencing the highcharts javascript file*@
+            @*<script src="http://code.highcharts.com/highcharts.js"></script>*@
+            @*<script src="https://code.highcharts.com/modules/exporting.js"></script>*@
+
+            <script src="~/Scripts/highcharts/4.2.0/modules/exporting.js"></script>
+            <script src="~/Scripts/highcharts/4.2.0/highcharts.js"> </script>
+
+
+        </div>
+    </div>
+
+</div>
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+
+            // This is for Get All Data
+            $("#btnAllUser").click(function() {
+
+                $.ajax({
+                    url: "@Url.Action("GetAllDays", "History")",
+                    data: "",
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        loadData(data);
+                    },
+                    error: function() {
+                        alert("Failed! Please try again.");
+                    }
+                });
+
+            });
+
+            // this will use for Get Data based on parameter
+            $("#btnSearch").click(function() {
+                $.ajax({
+                    url: "@Url.Action("GetAllDaysWithParameters", "History")",
+                    data: { prefix: $('#txtSearch').val() },
+                    type: "GET",
+                    dataType: "json",
+                    success: function(data) {
+                        loadData(data);
+                    },
+                    error: function() {
+                        alert("Failed! Please try again.");
+                    }
+                });
+            });
+
+
+            function loadData(data) {
+                // Here we will format & load/show data
+                var tab = $('<table class="myTable"></table>');
+                var thead = $('<thead></thead>');
+                thead.append('<th>Date</th>');
+                thead.append('<th>Tiker</th>');
+                thead.append('<th>Position</th>');
+                thead.append('<th>Price_Close</th>');
+                thead.append('<th>Market_Value</th>');
+                thead.append('<th>PL_Cum</th>');
+
+                tab.append(thead);
+                $.each(data, function(i, val) {
+
+                    //transorm DateTime to JSON Format
+
+                    // val.Date = new Date(parseInt(val.Date.substr(6)));
+                    val.Date = val.Date.substr(6);
+                    var currentTime = new Date(parseInt(val.Date));
+                    var month = currentTime.getMonth() + 1;
+                    var day = currentTime.getDate();
+                    var year = currentTime.getFullYear();
+                    var mydate = day + "/" + month + "/" + year;
+
+                    // Append database data here
+                    var trow = $('<tr>   </tr>');
+                    trow.append('<td>' + mydate + '  </td>');
+                    trow.append('<td>' + val.Tiker + '  </td>');
+                    trow.append('<td>' + val.Position + '  </td>');
+                    trow.append('<td>' + val.Price_Close + '  </td>');
+                    trow.append('<td>' + val.Market_Value + '  </td>');
+                    trow.append('<td>' + val.PL_Cum + '  </td>');
+                    tab.append(trow);
+                });
+                $("tr:odd", tab).css('background-color', 'lightblue');
+                $("#UpdatePanel").html(tab);
+            };
+
+        });
+    </script>
+
+
+}
+
+
+
+
+
+
+
+

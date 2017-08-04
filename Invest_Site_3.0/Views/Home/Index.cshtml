@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Invest.hv</h1>
+    <p class="lead">  Надежные инвестиционные решения для тех, кто идет в ногу со временем.</p>
+    <p><a href="@Url.Action("Index", "History")" class="btn btn-primary btn-lg"> Инвестировать &raquo;</a></p>
+</div>
+
+
+
+<div id="chart_div" style="width: 100%; height: 500px;"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+<script type="text/javascript">
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+          var url = "@Url.Action("GetTotal_PL", "History")";
+
+          var result = $.ajax({
+              method: 'GET',
+              url: url,
+              dataType: 'JSON',
+              async: false
+          });
+          var jsonData = result.responseText;
+          var data = new google.visualization.DataTable();
+          data.addColumn('date', 'Date');
+          data.addColumn('number', 'TotalPL');
+          
+          $.each(JSON.parse(jsonData), function (index, obj) {
+              obj.Date = new Date(parseInt(obj.Date.substr(6)));
+              data.addRow([obj.Date, obj.TotalPL]);
+          });
+
+       
+        var options = {
+          title: 'Comulative PL',
+          hAxis: {title: 'Date',  titleTextStyle: {color: '#333'}},
+          vAxis: { minValue: 0 },
+          animation:{
+              duration: 2000,
+              startup: true
+          },
+          colors: ['#00C78C']
+      
+
+        };
+          
+        
+        var chart = new google.visualization.AreaChart(document.getElementById('chart_div'));
+        chart.draw(data, options);
+      }
+</script>
+
+
+
+
+
+
